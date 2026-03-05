@@ -158,9 +158,20 @@ Add-Content -Path "C:\Windows\System32\drivers\etc\hosts" -Value "127.0.0.1 pedi
 
 ### 5.3 Reglas del Ingress
 - `/` → redirige al frontend (puerto 80)
-- `/api/*` → redirige al backend (puerto 8080)
-
+- `/api/productos` → redirige al backend (puerto 8080)
 ---
+
+## 5.3 Endpoints del Backend
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/productos` | Obtener todos los productos |
+| GET | `/api/productos/activos` | Obtener solo productos activos |
+| GET | `/api/productos/{id}` | Obtener producto por ID |
+| POST | `/api/productos` | Crear nuevo producto |
+| PUT | `/api/productos/{id}` | Actualizar producto existente |
+| DELETE | `/api/productos/{id}` | Eliminar producto |
+| GET | `/api/productos/existe/{nombre}` | Verificar si existe producto por nombre |
 
 ## 6. Horizontal Pod Autoscaler (HPA)
 
@@ -193,32 +204,8 @@ kubectl get pvc -n pedido-prod
 
 ## 8. Buenas Prácticas Implementadas
 
-- Credenciales almacenadas en Kubernetes Secrets, no en texto plano
-- Variables sensibles referenciadas con `secretKeyRef` en el Deployment
 - `limits` y `requests` de CPU/memoria definidos en todos los componentes
 - Separación clara de valores por ambiente (`values-dev.yaml` / `values-prod.yaml`)
 - Reutilización del chart oficial de PostgreSQL de Bitnami como dependencia
 - Labels consistentes en todos los recursos Kubernetes
 - Sincronización automática con `prune` y `selfHeal` habilitados en ArgoCD
-
----
-
-## 9. Demostración GitOps
-
-1. Subir la imagen con tag `prod` a Docker Hub:
-```bash
-docker tag nicou21/pedido-backend:dev nicou21/pedido-backend:prod
-docker push nicou21/pedido-backend:prod
-```
-
-2. Editar `values-prod.yaml` y cambiar el tag:
-```yaml
-tag: prod
-```
-
-3. Hacer commit y push:
-```bash
-git add . && git commit -m "Actualizar tag backend a prod" && git push origin main
-```
-
-4. Observar en la UI de ArgoCD (`https://localhost:8081`) cómo `pedido-app-prod` detecta el cambio y sincroniza automáticamente en ~3 minutos sin ningún comando adicional.
