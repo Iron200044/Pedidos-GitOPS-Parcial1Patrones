@@ -22,12 +22,16 @@ backend:
   env:
     - name: SPRING_DATASOURCE_URL
       value: jdbc:postgresql://pedido-app-dev-postgresql:5432/pedidos
-
     - name: SPRING_DATASOURCE_USERNAME
-      value: pedido
-
+      valueFrom:
+        secretKeyRef:
+          name: pedido-app-dev-backend-secret
+          key: username
     - name: SPRING_DATASOURCE_PASSWORD
-      value: pedido123
+      valueFrom:
+        secretKeyRef:
+          name: pedido-app-dev-backend-secret
+          key: password
 
   resources:
     requests:

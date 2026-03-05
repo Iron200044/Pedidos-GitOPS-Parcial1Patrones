@@ -1,14 +1,61 @@
 frontend:
+  image: nicou21/pedido-frontend
+  tag: prod
   replicaCount: 2
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "400m"
+      memory: "512Mi"
 
 backend:
+  image: nicou21/pedido-backend
+  tag: prod
   replicaCount: 2
+  service:
+    port: 8080
+  env:
+    - name: SPRING_DATASOURCE_URL
+      value: jdbc:postgresql://pedido-app-prod-postgresql:5432/pedidos
+    - name: SPRING_DATASOURCE_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: pedido-app-prod-backend-secret
+          key: username
+    - name: SPRING_DATASOURCE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: pedido-app-prod-backend-secret
+          key: password
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 8
+    targetCPUUtilizationPercentage: 70
 
 postgresql:
+  enabled: true
+  auth:
+    username: pedido
+    password: pedido123
+    database: pedidos
   primary:
     persistence:
       enabled: true
       size: 2Gi
 
 ingress:
+  enabled: true
   host: pedido-prod.local
