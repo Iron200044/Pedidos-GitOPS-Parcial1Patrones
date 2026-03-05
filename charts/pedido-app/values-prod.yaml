@@ -15,7 +15,7 @@ frontend:
 
 backend:
   image: nicou21/pedido-backend
-  tag: dev
+  tag: prod
   replicaCount: 2
   service:
     port: 8080
