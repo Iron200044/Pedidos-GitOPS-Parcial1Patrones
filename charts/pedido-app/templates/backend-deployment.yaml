@@ -18,19 +18,7 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://pedido-app-postgresql:5432/pedidos
+            {{- toYaml .Values.backend.env | nindent 12 }}
 
-            - name: SPRING_DATASOURCE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-db-secret
-                  key: username
-
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-db-secret
-                  key: password
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}

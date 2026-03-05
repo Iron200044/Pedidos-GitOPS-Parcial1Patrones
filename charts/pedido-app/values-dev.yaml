@@ -21,7 +21,13 @@ backend:
     port: 8080
   env:
     - name: SPRING_DATASOURCE_URL
-      value: jdbc:postgresql://pedido-app-postgresql:5432/pedidos
+      value: jdbc:postgresql://pedido-app-dev-postgresql:5432/pedidos
+
+    - name: SPRING_DATASOURCE_USERNAME
+      value: pedido
+
+    - name: SPRING_DATASOURCE_PASSWORD
+      value: pedido123
 
   resources:
     requests:
