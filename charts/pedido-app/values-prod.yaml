@@ -1,0 +1,14 @@
+frontend:
+  replicaCount: 2
+
+backend:
+  replicaCount: 2
+
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      size: 2Gi
+
+ingress:
+  host: pedido-prod.local
